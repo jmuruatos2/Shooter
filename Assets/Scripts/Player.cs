@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     private float _maxSpeed = 20.0f;
     private bool _isAccelerating;
     private SpriteRenderer _shieldSpriteRenderer;
+    private int _ammo;
     [SerializeField]
     private int _shieldStrength;
     [SerializeField]
@@ -49,6 +50,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         _shieldSpriteRenderer = _shieldObject.GetComponent<SpriteRenderer>();
+        _ammo = 15;
+        
 
         if (_shieldSpriteRenderer == null)
         {
@@ -60,6 +63,7 @@ public class Player : MonoBehaviour
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _tripleShot = false;
         _uiManager = UIManager.GetComponent<UIManager>();
+        _uiManager.UpdateAmmo(_ammo);
 
         if (_spawnManager == null)
         {
@@ -117,18 +121,23 @@ public class Player : MonoBehaviour
     {
         
             _canFire = Time.time + _fireRate;
-
-        if (_tripleShot)
+        if (_ammo > 0)
         {
-            Instantiate(_tripleShotPrefab, new Vector3(transform.position.x - 0.325177f, transform.position.y + 2.24f), Quaternion.identity);
-        }
-        else
-        {
-            Instantiate(_laserPrefab, new Vector3(transform.position.x, transform.position.y + 1.5f), Quaternion.identity);
-        }
+            if (_tripleShot)
+            {
+                Instantiate(_tripleShotPrefab, new Vector3(transform.position.x - 0.325177f, transform.position.y + 2.24f), Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(_laserPrefab, new Vector3(transform.position.x, transform.position.y + 1.5f), Quaternion.identity);
+            }
 
-        _laserAudio.Play();
+            _ammo--;
+            _laserAudio.Play();
 
+            _uiManager.UpdateAmmo(_ammo);
+
+        }
     }
 
     public void PlayerDamage()
@@ -216,6 +225,7 @@ public class Player : MonoBehaviour
         _score += points;
         _uiManager.UpdateScore(_score);
     }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

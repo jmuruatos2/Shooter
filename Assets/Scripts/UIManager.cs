@@ -19,9 +19,12 @@ public class UIManager : MonoBehaviour
     private bool _playing;
     private bool _gameOverVisible;
     private GameManager _gameManager;
+    [SerializeField]
+    private Text _ammoText;
 
     void Start()
     {
+       
         _scoreText.text = "Score: 0";
         _gameOver.gameObject.SetActive(false);
         _playing = true;
@@ -42,6 +45,11 @@ public class UIManager : MonoBehaviour
    public void UpdateScore(int score)
     {
         _scoreText.text = "Score: " + score;
+    }
+
+    public void UpdateAmmo (int ammo)
+    {
+        _ammoText.text = "Ammo: " + ammo;
     }
  
     public void UpdateLives(int lives)
