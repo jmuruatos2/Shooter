@@ -220,6 +220,12 @@ public class Player : MonoBehaviour
 
     }
 
+    public void RechargeAmmo(int ammo)
+    {
+        _ammo += ammo;
+        _uiManager.UpdateAmmo(_ammo);
+    }
+
     public void addScore(int points)
     {
         _score += points;
