@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _maxSpeed = 20.0f;
     private bool _isAccelerating;
+    private SpriteRenderer _shieldSpriteRenderer;
+    [SerializeField]
+    private int _shieldStrength;
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
@@ -22,8 +25,6 @@ public class Player : MonoBehaviour
     private int _lives = 3;
     [SerializeField]
     private bool _tripleShot;
-    [SerializeField]
-    private bool _shieldActive;
     [SerializeField]
     private GameObject _shieldObject;
     private SpawnManager _spawnManager;
@@ -47,12 +48,17 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        _shieldSpriteRenderer = _shieldObject.GetComponent<SpriteRenderer>();
+
+        if (_shieldSpriteRenderer == null)
+        {
+            Debug.LogError("Shield SpriteRenderer Null");
+        }
         speed = _normalSpeed;
         _isAccelerating = false;
         transform.position = new Vector3(0, 0,0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _tripleShot = false;
-        _shieldActive = false;
         _uiManager = UIManager.GetComponent<UIManager>();
 
         if (_spawnManager == null)
@@ -127,10 +133,25 @@ public class Player : MonoBehaviour
 
     public void PlayerDamage()
     {
-        if (_shieldActive)
+        if (_shieldStrength > 0)
         {
-            _shieldActive = false;
-            _shieldObject.SetActive(false);
+            _shieldStrength--;
+
+
+
+            switch (_shieldStrength)
+            {
+                case 0:
+                    _shieldObject.SetActive(false);
+                    break;
+                case 1:
+                    _shieldSpriteRenderer.color = Color.red;
+                    break;
+                case 2:
+                    _shieldSpriteRenderer.color = Color.yellow;
+                    break;
+            }
+
             return;
         }
         _lives--;
@@ -181,12 +202,12 @@ public class Player : MonoBehaviour
         speed = 4;
     }
 
-    public void ActivateShield(int seconds)
+    public void ActivateShield()
     {
         _powerUpAudio.Play();
-        _shieldActive = true;
         _shieldObject.SetActive(true);
-
+        _shieldStrength = 3;
+        _shieldSpriteRenderer.color = Color.white;
 
     }
 

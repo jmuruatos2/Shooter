@@ -229,12 +229,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
+  _maxSpeed: 20
+  _shieldStrength: 0
   _laserPrefab: {fileID: 8745275621580907125, guid: 0eb8dafbbc7a35246b4815fcd501128a, type: 3}
   _tripleShotPrefab: {fileID: 174855280515202378, guid: 73f363d0118fbe640bff72115bec0c92, type: 3}
   _fireRate: 0.15
   _lives: 3
   _tripleShot: 0
-  _shieldActive: 0
   _shieldObject: {fileID: 1422345336}
   UIManager: {fileID: 2017066935}
   _FireLeft: {fileID: 2041432432}
@@ -1574,7 +1575,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -563194679
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 333b0196b7a764df5a7768ead9b69dbc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
