@@ -44,6 +44,9 @@ public class PowerUp : MonoBehaviour
                 case 3:
                     player.RechargeAmmo(15);
                     break;
+                case 4:
+                    player.RecoverLife();
+                    break;
             }
 
             Destroy(this.gameObject);

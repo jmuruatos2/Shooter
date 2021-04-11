@@ -2019,6 +2019,7 @@ MonoBehaviour:
   - {fileID: 6674329387259664847, guid: 7efaf5dff81d0f3448205c088a75c00c, type: 3}
   - {fileID: 1602816235865029192, guid: d41a46d30760d11408b8f52df4b2826e, type: 3}
   - {fileID: 6408994306906463304, guid: 5bbddb3695981ac4c8db7670f5f5d857, type: 3}
+  - {fileID: 5420122287431693399, guid: 1d945ef2cc017194bb7176b68a60705e, type: 3}
 --- !u!4 &1828299874
 Transform:
   m_ObjectHideFlags: 0

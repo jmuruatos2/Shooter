@@ -232,6 +232,14 @@ public class Player : MonoBehaviour
         _uiManager.UpdateScore(_score);
     }
 
+    public void RecoverLife()
+    {
+        if (_lives < 3)
+        {
+            _lives++;
+            _uiManager.UpdateLives(_lives);
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
