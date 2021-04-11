@@ -5,8 +5,12 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private float _normalSpeed = 4.0f;  //es la velocidad inicial
     [SerializeField]
-    public float speed = 4.0f;
+    private float speed; // es la velocidad actual del jugador    
+    [SerializeField]
+    private float _maxSpeed = 20.0f;
+    private bool _isAccelerating;
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
@@ -43,6 +47,8 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        speed = _normalSpeed;
+        _isAccelerating = false;
         transform.position = new Vector3(0, 0,0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _tripleShot = false;
@@ -70,6 +76,11 @@ public class Player : MonoBehaviour
 
     void CalculateMovement()
     {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !_isAccelerating)
+        {
+            StartCoroutine(Accelerate());
+        }
+        
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
@@ -93,6 +104,8 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x, -3.57f, 0);
         }
+
+
     }
     void Fire() 
     {
@@ -191,5 +204,22 @@ public class Player : MonoBehaviour
             PlayerDamage();
             Destroy(collision.gameObject);
         }
+    }
+
+    private IEnumerator Accelerate()
+    {
+        Debug.Log("Acelerando");
+        _isAccelerating = true;
+        
+        while (Input.GetKey(KeyCode.LeftShift))
+        {
+            if (speed <= _maxSpeed)
+            {
+                speed++;
+            }
+            yield return new WaitForSeconds(1);
+        }
+        _isAccelerating = false;
+        speed = _normalSpeed;
     }
 }
