@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
+    private GameObject _hommingMissilePrefab;
+    [SerializeField]
     private GameObject _tripleShotPrefab;
     [SerializeField]
     private float _fireRate = 0.15f;
@@ -26,6 +28,8 @@ public class Player : MonoBehaviour
     private int _lives = 3;
     [SerializeField]
     private bool _tripleShot;
+    [SerializeField]
+    private bool _hommingMissileActive;
     [SerializeField]
     private GameObject _shieldObject;
     private SpawnManager _spawnManager;
@@ -49,6 +53,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        _hommingMissileActive = false;
         _shieldSpriteRenderer = _shieldObject.GetComponent<SpriteRenderer>();
         _ammo = 15;
         
@@ -118,12 +123,15 @@ public class Player : MonoBehaviour
 
     }
     void Fire() 
-    {
-        
+    {        
             _canFire = Time.time + _fireRate;
         if (_ammo > 0)
         {
-            if (_tripleShot)
+            if (_hommingMissileActive)
+            {
+                Instantiate(_hommingMissilePrefab, new Vector3(transform.position.x, transform.position.y + 2.0f), Quaternion.identity);
+            }
+            else if (_tripleShot)
             {
                 Instantiate(_tripleShotPrefab, new Vector3(transform.position.x - 0.325177f, transform.position.y + 2.24f), Quaternion.identity);
             }
@@ -186,6 +194,7 @@ public class Player : MonoBehaviour
     public void ActivateTripleShot(int seconds)
     {
         _tripleShot = true;
+        _hommingMissileActive = false;
         _powerUpAudio.Play();
         StartCoroutine(TripleShotPowerDownRoutine(seconds));
         
@@ -196,6 +205,19 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         _tripleShot = false;
+    }
+
+    public void ActivateMissile()
+    {
+        _tripleShot = false;
+        _hommingMissileActive = true;
+        StartCoroutine(HommingMissilePowerDown(5));
+    }
+
+    private IEnumerator HommingMissilePowerDown(int seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        _hommingMissileActive = false;
     }
 
     public void ActivateSpeedPowerup (int seconds)

@@ -24,6 +24,7 @@ public class SpawnManager : MonoBehaviour
         playing = true;
         StartCoroutine(SpawnEnemy(5)); //spawn enemy every 5 seconds
         StartCoroutine("SpawnPowerup");
+        StartCoroutine("SpawnMissile");
     }
 
 
@@ -58,6 +59,14 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    private IEnumerator SpawnMissile()
+    {
+        while (playing)
+        {
+            yield return new WaitForSeconds(Random.Range(10, 20));
+            Instantiate(_powerups[5], new Vector3(RandomX(), 8), Quaternion.identity);
+        }
+    }
 
     // Random Value in X axis
     private float RandomX()
