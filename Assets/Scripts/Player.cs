@@ -5,12 +5,18 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private float _normalSpeed = 4.0f;  //es la velocidad inicial
+    private int _normalSpeed = 4;  //es la velocidad inicial
     [SerializeField]
-    private float speed; // es la velocidad actual del jugador    
+    private int speed; // es la velocidad actual del jugador    
     [SerializeField]
-    private float _maxSpeed = 20.0f;
+    private int _maxSpeed = 15; //velocidad maxima normal (left shift)
+    private int _maxSpeedPowerup = 20; //velocidad maxima con powerup
     private bool _isAccelerating;
+    private bool _isDeaccelerating;
+    private bool _speedPowerUpActive;
+    [SerializeField]
+    private int _speedPowerupsStacked; 
+
     private SpriteRenderer _shieldSpriteRenderer;
     private int _ammo;
     [SerializeField]
@@ -56,6 +62,7 @@ public class Player : MonoBehaviour
         _hommingMissileActive = false;
         _shieldSpriteRenderer = _shieldObject.GetComponent<SpriteRenderer>();
         _ammo = 15;
+        _speedPowerupsStacked = 0;
         
 
         if (_shieldSpriteRenderer == null)
@@ -64,12 +71,15 @@ public class Player : MonoBehaviour
         }
         speed = _normalSpeed;
         _isAccelerating = false;
+        _isDeaccelerating = false;
+        _speedPowerUpActive = false;
         transform.position = new Vector3(0, 0,0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _tripleShot = false;
         _uiManager = UIManager.GetComponent<UIManager>();
         _uiManager.UpdateAmmo(_ammo);
-
+        
+        
         if (_spawnManager == null)
         {
             Debug.LogError("SpawnManager null");
@@ -91,7 +101,7 @@ public class Player : MonoBehaviour
 
     void CalculateMovement()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !_isAccelerating)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !_isAccelerating && !_speedPowerUpActive)
         {
             StartCoroutine(Accelerate());
         }
@@ -220,18 +230,6 @@ public class Player : MonoBehaviour
         _hommingMissileActive = false;
     }
 
-    public void ActivateSpeedPowerup (int seconds)
-    {
-        _powerUpAudio.Play();
-        speed = 8;
-        StartCoroutine(SpeedPowerDownRoutine(seconds));
-    }
-
-    private IEnumerator SpeedPowerDownRoutine(int seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-        speed = 4;
-    }
 
     public void ActivateShield()
     {
@@ -275,18 +273,70 @@ public class Player : MonoBehaviour
 
     private IEnumerator Accelerate()
     {
-        Debug.Log("Acelerando");
         _isAccelerating = true;
+        _isDeaccelerating = false;
         
-        while (Input.GetKey(KeyCode.LeftShift))
+        while (Input.GetKey(KeyCode.LeftShift) && !_speedPowerUpActive)
         {
             if (speed <= _maxSpeed)
             {
                 speed++;
+                _uiManager.UpdateThruster(speed);
             }
             yield return new WaitForSeconds(1);
         }
         _isAccelerating = false;
-        speed = _normalSpeed;
+        if (!_speedPowerUpActive)
+        {
+            StartCoroutine("Deaccelerate");
+        }
+        _uiManager.UpdateThruster(speed);
+    }
+
+
+    public void ActivateSpeedPowerup(int seconds)
+    {
+        _powerUpAudio.Play();
+        speed = _maxSpeedPowerup;
+        _uiManager.UpdateThruster(speed);
+        _speedPowerUpActive = true;
+        _isDeaccelerating = false;
+
+        if (_speedPowerupsStacked < 1)
+        {
+            _speedPowerupsStacked++;
+            StartCoroutine(SpeedPowerDownRoutine(seconds));
+        } else
+        {
+            _speedPowerupsStacked++;
+        }
+        
+
+    }
+
+    
+    private IEnumerator SpeedPowerDownRoutine(int seconds)
+    {
+        while (_speedPowerupsStacked > 0)
+        {   
+            yield return new WaitForSeconds(seconds);
+            _speedPowerupsStacked--;
+        }
+
+        _speedPowerUpActive = false;
+        StartCoroutine("Deaccelerate");
+
+    }
+
+    private IEnumerator Deaccelerate()
+    {
+        _isDeaccelerating = true;
+        while (speed > _normalSpeed && _isDeaccelerating)
+        {
+            speed--;
+            _uiManager.UpdateThruster(speed);
+            yield return new WaitForSeconds(1); //CAMBIAR POR VARIABLE
+        }
+        _isDeaccelerating = false;
     }
 }

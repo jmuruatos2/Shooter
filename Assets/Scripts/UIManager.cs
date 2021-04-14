@@ -16,20 +16,29 @@ public class UIManager : MonoBehaviour
     private Text _gameOver;
     [SerializeField]
     private Text _restartText;
+    [SerializeField]
+    private GameObject _thrusterBar;
+    private Slider _thrusterBarSlider;
     private bool _playing;
     private bool _gameOverVisible;
     private GameManager _gameManager;
     [SerializeField]
     private Text _ammoText;
+    private int _thrusterMaxValue = 20;
 
     void Start()
     {
-       
+        _thrusterBarSlider = _thrusterBar.GetComponent<Slider>();
+        if (_thrusterBarSlider == null)
+        {
+            Debug.LogError("Slider de thrusterbar no encontrado");
+        }
         _scoreText.text = "Score: 0";
         _gameOver.gameObject.SetActive(false);
         _playing = true;
         _gameOverVisible = false;
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+        UpdateThruster(4);
         if(_gameManager == null)
         {
             Debug.LogError("GameManager is null");
@@ -62,6 +71,12 @@ public class UIManager : MonoBehaviour
         _playing = false;
         StartCoroutine("ShowGameOverFlick");
         _restartText.gameObject.SetActive(true);
+    }
+
+    public void UpdateThruster (int thruster)
+    {
+        _thrusterBarSlider.maxValue = _thrusterMaxValue;
+        _thrusterBarSlider.value = thruster;
     }
 
     private IEnumerator ShowGameOverFlick()

@@ -12,10 +12,12 @@ public class Enemy : MonoBehaviour
     private AudioSource _audioExplotion;
     [SerializeField]
     private GameObject _laser;
+    private bool _isEnemyAlive;
 
     // Start is called before the first frame update
     void Start()
     {
+        _isEnemyAlive = true;
         _player = GameObject.Find("Player").GetComponent<Player>();
         _animator = gameObject.GetComponent<Animator>();
         _audioExplotion = gameObject.GetComponent<AudioSource>();
@@ -73,7 +75,10 @@ public class Enemy : MonoBehaviour
     private IEnumerator Shot()
     {
         yield return new WaitForSeconds(Random.Range(1.0f, 3.0f));
-        Instantiate(_laser, new Vector2(transform.position.x, transform.position.y -1.37f) , Quaternion.identity);
+        if (_isEnemyAlive)
+        {
+            Instantiate(_laser, new Vector2(transform.position.x, transform.position.y - 1.37f), Quaternion.identity);
+        }
     }
     private void Destruir()
     {
@@ -82,6 +87,7 @@ public class Enemy : MonoBehaviour
         _audioExplotion.Play();
         Destroy(GetComponent<Collider2D>());
         //yield return new WaitForSeconds(2);
+        _isEnemyAlive = false;
         Destroy(this.gameObject, 2.8f);
     }
 }

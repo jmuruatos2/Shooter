@@ -71,7 +71,7 @@ public class SpawnManager : MonoBehaviour
     // Random Value in X axis
     private float RandomX()
     {
-        return Random.Range(-11.0f, 11.0f);
+        return Random.Range(-9.5f, 9.5f);
     }
 
     public void StopPlaying()
