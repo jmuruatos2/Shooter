@@ -245,6 +245,7 @@ MonoBehaviour:
   _FireRight: {fileID: 1347293692}
   _laserAudio: {fileID: 1770567960}
   _powerUpAudio: {fileID: 483320632}
+  _camera: {fileID: 687471470}
 --- !u!212 &483320629
 SpriteRenderer:
   m_ObjectHideFlags: 0

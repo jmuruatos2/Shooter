@@ -50,6 +50,10 @@ public class Player : MonoBehaviour
     private AudioSource _laserAudio;
     [SerializeField]
     private AudioSource _powerUpAudio;
+    [SerializeField]
+    private GameObject _camera;
+
+    private bool _isCameraShaking;
 
     
     
@@ -63,6 +67,7 @@ public class Player : MonoBehaviour
         _shieldSpriteRenderer = _shieldObject.GetComponent<SpriteRenderer>();
         _ammo = 15;
         _speedPowerupsStacked = 0;
+        _isCameraShaking = false;
         
 
         if (_shieldSpriteRenderer == null)
@@ -95,6 +100,10 @@ public class Player : MonoBehaviour
             Fire();
         }
 
+        if (_isCameraShaking)
+        {
+            _camera.transform.localPosition = _camera.transform.localPosition + Random.insideUnitSphere * 0.10f;
+        }
 
 
     }
@@ -182,7 +191,11 @@ public class Player : MonoBehaviour
             return;
         }
         _lives--;
-        _uiManager.UpdateLives(_lives);
+        if (!_isCameraShaking)
+        {
+            StartCoroutine(CameraShake());
+        }
+            _uiManager.UpdateLives(_lives);
 
         if (_lives == 2)
         {
@@ -199,6 +212,15 @@ public class Player : MonoBehaviour
             _uiManager.ShowGameOverText();
             Destroy(this.gameObject);
         }
+    }
+
+    public IEnumerator CameraShake()
+    {
+        _isCameraShaking = true;
+        yield return new WaitForSeconds(0.5f);
+        _isCameraShaking = false;
+        _camera.transform.position = new Vector3(0, 1, -10);
+
     }
 
     public void ActivateTripleShot(int seconds)
