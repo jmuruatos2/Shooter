@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
 
     private SpriteRenderer _shieldSpriteRenderer;
     private int _ammo;
+    private int _maxAmmo = 30;
     [SerializeField]
     private int _shieldStrength;
     [SerializeField]
@@ -265,6 +266,10 @@ public class Player : MonoBehaviour
     public void RechargeAmmo(int ammo)
     {
         _ammo += ammo;
+        if (_ammo > _maxAmmo)
+        {
+            _ammo = _maxAmmo;
+        }
         _uiManager.UpdateAmmo(_ammo);
     }
 
