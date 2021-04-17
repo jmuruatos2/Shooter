@@ -5,17 +5,17 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 4.0f;
+    public float _speed = 4.0f;
     [SerializeField]
     private Player _player;
     private Animator _animator;
     private AudioSource _audioExplotion;
     [SerializeField]
     private GameObject _laser;
-    private bool _isEnemyAlive;
+    public bool _isEnemyAlive;
 
     // Start is called before the first frame update
-    void Start()
+    public virtual void Start()
     {
         _isEnemyAlive = true;
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -38,14 +38,19 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-   
+        Movimiento();
+       
+
+    }
+
+    public virtual void Movimiento()
+    {
         if (transform.position.y < -5.85f)
         {
             transform.position = new Vector3(Random.Range(-14f, 14f), 7.67f);
         }
 
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
-
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -80,7 +85,7 @@ public class Enemy : MonoBehaviour
             Instantiate(_laser, new Vector2(transform.position.x, transform.position.y - 1.37f), Quaternion.identity);
         }
     }
-    private void Destruir()
+    public virtual void Destruir()
     {
         _animator.SetTrigger("destroy");
         _speed = 0;

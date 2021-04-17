@@ -43,6 +43,7 @@ public class SpawnManager : MonoBehaviour
             GameObject newEnemy = Instantiate(_enemyObject, new Vector3(RandomX(), 8), Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
             yield return new WaitForSeconds(timeInSeconds);
+            
 
         }
     }
