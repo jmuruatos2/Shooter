@@ -50,6 +50,9 @@ public class PowerUp : MonoBehaviour
                 case 5:
                     player.ActivateMissile();
                     break;
+                case 6:
+                    player.PlayerDamage();
+                    break;
             }
 
             Destroy(this.gameObject);
