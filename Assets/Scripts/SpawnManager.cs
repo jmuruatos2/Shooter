@@ -8,9 +8,14 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyObject;
     [SerializeField]
+    private GameObject[] _enemy2Object;
+    [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
     private GameObject[] _powerups;
+    private float _secondsWaitNextWave;
+    private float _waitFrequencyInWave;
+    private int _enemyIndex;
   
 
     // Start is called before the first frame update
@@ -22,7 +27,8 @@ public class SpawnManager : MonoBehaviour
     public void StartSpawning()
     {
         playing = true;
-        StartCoroutine(SpawnEnemy(5)); //spawn enemy every 5 seconds
+        //StartCoroutine(SpawnEnemy(5)); //spawn enemy every 5 seconds
+        StartCoroutine("WaveManager");
         StartCoroutine("SpawnPowerup");
         StartCoroutine("SpawnMissile");
     }
@@ -46,6 +52,47 @@ public class SpawnManager : MonoBehaviour
             
 
         }
+    }
+
+    public IEnumerator WaveManager()
+    {
+        _secondsWaitNextWave = 30;
+        _waitFrequencyInWave = 5;
+        _enemyIndex = 0;
+        StartCoroutine("SpawnEnemy2");
+        yield return new WaitForSeconds(_secondsWaitNextWave);
+        StopCoroutine("SpawnEnemy2");
+        _secondsWaitNextWave = 30;
+        _waitFrequencyInWave = 3;
+        _enemyIndex = 1;
+        StartCoroutine("SpawnEnemy2");
+        yield return new WaitForSeconds(_secondsWaitNextWave);
+        StopCoroutine("SpawnEnemy2");
+    }
+
+    public IEnumerator SpawnEnemy2()
+    {
+        int i = 0;
+        WaitForSeconds espera = new WaitForSeconds(_waitFrequencyInWave);
+       
+        while (playing)
+        {
+            GameObject newEnemy = Instantiate(_enemy2Object[i], new Vector3(RandomX(), 8), Quaternion.identity);
+            newEnemy.transform.parent = _enemyContainer.transform;
+            yield return espera;
+
+            if (i < _enemyIndex)
+            {
+                i++;
+            } else
+            {
+                i = 0;
+            }
+
+
+        }
+        
+
     }
 
     IEnumerator SpawnPowerup()
