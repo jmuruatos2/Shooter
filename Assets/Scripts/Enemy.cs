@@ -13,6 +13,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private GameObject _laser;
     public bool _isEnemyAlive;
+    public bool _shieldActive;
+    [SerializeField]
+    public GameObject _shieldObject;
 
     // Start is called before the first frame update
     public virtual void Start()
@@ -21,6 +24,15 @@ public class Enemy : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<Player>();
         _animator = gameObject.GetComponent<Animator>();
         _audioExplotion = gameObject.GetComponent<AudioSource>();
+
+        if (Random.Range(0,6) == 2)
+        {
+            _shieldActive = true;
+            _shieldObject.SetActive(true);
+
+        }
+
+
 
         if(_animator == null)
         {
@@ -87,6 +99,13 @@ public class Enemy : MonoBehaviour
     }
     public virtual void Destruir()
     {
+        if(_shieldActive)
+        {
+            _shieldActive = false;
+            _shieldObject.SetActive(false);
+            return;
+        }
+
         _animator.SetTrigger("destroy");
         _speed = 0;
         _audioExplotion.Play();
