@@ -10,6 +10,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] _enemy2Object;
     [SerializeField]
+    private GameObject _enemy3Object;
+    [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
     private GameObject[] _powerups;
@@ -43,6 +45,8 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnEnemy(float timeInSeconds)
     {
         yield return new WaitForSeconds(3.0f);
+        
+
         while (playing)
         {
 
@@ -56,6 +60,7 @@ public class SpawnManager : MonoBehaviour
 
     public IEnumerator WaveManager()
     {
+        
         _secondsWaitNextWave = 30;
         _waitFrequencyInWave = 5;
         _enemyIndex = 0;
@@ -65,6 +70,8 @@ public class SpawnManager : MonoBehaviour
         _secondsWaitNextWave = 30;
         _waitFrequencyInWave = 3;
         _enemyIndex = 1;
+        GameObject SpecialEnemy = Instantiate(_enemy3Object, new Vector3(-11.97f, 0.21f, 0), Quaternion.identity);
+        SpecialEnemy.transform.rotation = Quaternion.Euler(0, 0, 90);
         StartCoroutine("SpawnEnemy2");
         yield return new WaitForSeconds(_secondsWaitNextWave);
         StopCoroutine("SpawnEnemy2");
@@ -74,7 +81,7 @@ public class SpawnManager : MonoBehaviour
     {
         int i = 0;
         WaitForSeconds espera = new WaitForSeconds(_waitFrequencyInWave);
-       
+        
         while (playing)
         {
             GameObject newEnemy = Instantiate(_enemy2Object[i], new Vector3(RandomX(), 8), Quaternion.identity);

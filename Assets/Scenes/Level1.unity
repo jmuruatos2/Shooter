@@ -2110,7 +2110,8 @@ MonoBehaviour:
   _enemy2Object:
   - {fileID: 2768459659019708879, guid: 59f882909d161b54eb8631a67b5cd7c4, type: 3}
   - {fileID: 1775998150614137346, guid: 72008094e20732d4f83482726d68efb2, type: 3}
-  _enemyContainer: {fileID: 1775998150614137346, guid: 72008094e20732d4f83482726d68efb2, type: 3}
+  _enemy3Object: {fileID: 7261452470530412630, guid: 4f5a6c1709a827b40bcfe78330dbacd9, type: 3}
+  _enemyContainer: {fileID: 22642061}
   _powerups:
   - {fileID: 5044022769414841546, guid: a218ac1dec7bad1498f126ba5dbd1220, type: 3}
   - {fileID: 6674329387259664847, guid: 7efaf5dff81d0f3448205c088a75c00c, type: 3}
