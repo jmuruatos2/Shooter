@@ -12,6 +12,7 @@ public class Enemy2 : Enemy
     private bool _home;
     private Vector2 _centro;
     private Animator _animator;
+   
 
     
     public override void Start()
