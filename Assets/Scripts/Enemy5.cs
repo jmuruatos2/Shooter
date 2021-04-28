@@ -68,12 +68,12 @@ public class Enemy5 : MonoBehaviour
         if (_mirandoAbajo)
         {
              hit = Physics2D.Raycast(transform.position - new Vector3(0, 1.0f, 0), Vector2.down);
-            Debug.DrawRay(transform.position - new Vector3(0,1.0f,0), Vector2.down);
+          
 
         } else
         {
              hit = Physics2D.Raycast(transform.position + new Vector3(0, 1.0f, 0), Vector2.up);
-            Debug.DrawRay(transform.position + new Vector3(0, 1.0f, 0), Vector2.up);
+           
         }
             
         if (hit.collider != null && hit.collider.gameObject.tag == "Player")

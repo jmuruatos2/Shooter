@@ -23,15 +23,21 @@ public class Laser : MonoBehaviour
             transform.Translate(Vector3.up * Time.deltaTime * _speed);
         } else
         {
-            if (transform.parent != null )
-            {
-                Destroy(transform.parent.gameObject);
-            } else
-            {
-                Destroy(this.gameObject);
-            }
+            DestroyLaser();
             
         }
         
+    }
+
+    public void DestroyLaser()
+    {
+        if (transform.parent != null)
+        {
+            Destroy(transform.parent.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

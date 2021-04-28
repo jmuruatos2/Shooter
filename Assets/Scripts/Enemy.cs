@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     public bool _shieldActive;
     [SerializeField]
     public GameObject _shieldObject;
+    Vector3 _vectorRayOffset;
 
     // Start is called before the first frame update
     public virtual void Start()
@@ -24,6 +25,7 @@ public class Enemy : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<Player>();
         _animator = gameObject.GetComponent<Animator>();
         _audioExplotion = gameObject.GetComponent<AudioSource>();
+        _vectorRayOffset = new Vector3(0, -1.5f, 0.0f);
 
         if (Random.Range(0,6) == 2)
         {
@@ -43,7 +45,7 @@ public class Enemy : MonoBehaviour
             Debug.LogError("AudioSource is null");
         }
 
-        StartCoroutine(Shot());
+        //StartCoroutine(Shot());
 
     }
 
@@ -63,6 +65,14 @@ public class Enemy : MonoBehaviour
         }
 
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
+
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position + _vectorRayOffset, Vector3.down);
+        Debug.DrawRay(transform.position + _vectorRayOffset, Vector3.down);
+        if (hit.collider != null && hit.collider.gameObject.CompareTag("Powerup"))
+        {
+            Instantiate(_laser, new Vector2(transform.position.x, transform.position.y - 1.37f), Quaternion.identity);           
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)

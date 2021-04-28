@@ -9,9 +9,10 @@ public class PowerUp : MonoBehaviour
     [SerializeField]
     private int _powerupID;  // 0 -> TripleShot  1--> Speed 2--> Shield
     // Start is called before the first frame update
+    private Laser _laser;
     void Start()
     {
-        
+       
     }
 
     // Update is called once per frame
@@ -55,6 +56,12 @@ public class PowerUp : MonoBehaviour
                     break;
             }
 
+            Destroy(this.gameObject);
+        }
+        if(other.CompareTag("Laser"))
+        {
+            _laser = other.gameObject.GetComponent<Laser>();
+            _laser.DestroyLaser();
             Destroy(this.gameObject);
         }
     }
