@@ -10,15 +10,44 @@ public class PowerUp : MonoBehaviour
     private int _powerupID;  // 0 -> TripleShot  1--> Speed 2--> Shield
     // Start is called before the first frame update
     private Laser _laser;
+    private Vector3 _vector;
+    private float _x;
+    private GameObject _player;
     void Start()
     {
-       
+        _player = GameObject.FindGameObjectWithTag("Player");  
+        if (_player == null)
+        {
+            Debug.LogError("Player Null!");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.down * Time.deltaTime * _speed);
+        
+        if (Input.GetKey(KeyCode.C))
+        {
+            if (_player != null)
+            {
+                if (_player.transform.position.x > transform.position.x)
+                {
+                    _x = 1;
+                } else if (_player.transform.position.x < transform.position.x)
+                {
+                    _x = -1;
+                }
+            }
+        } else
+        {
+            _x = 0;
+        }
+
+        _vector = new Vector3(_x, -1, 0);
+
+        transform.Translate(_vector * Time.deltaTime * _speed);
+
+
         if (transform.position.y < -6.0f)
         {
             Destroy(this.gameObject);
