@@ -6,11 +6,12 @@ public class Laser : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 8.0f;
+    private Vector3 _vectorOffset;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        _vectorOffset = new Vector3(0.0f, 0.5f, 0.0f);
         
     }
 
@@ -26,6 +27,18 @@ public class Laser : MonoBehaviour
             DestroyLaser();
             
         }
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position + _vectorOffset, Vector3.up);
+        if (hit.collider != null)
+        {
+            if (hit.collider.gameObject.CompareTag("Enemy"))
+            {
+                Enemy enemy = hit.collider.gameObject.GetComponent<Enemy>();
+                enemy.Evadir(transform.position.x);
+                
+            }
+        }
+        
         
     }
 

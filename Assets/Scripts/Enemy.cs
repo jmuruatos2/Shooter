@@ -17,10 +17,14 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     public GameObject _shieldObject;
     Vector3 _vectorRayOffset;
+    
+    private Vector3 _vectorMovimiento;
+    private float _xMovement;
 
     // Start is called before the first frame update
     public virtual void Start()
     {
+        _xMovement = 0;
         _isEnemyAlive = true;
         _player = GameObject.Find("Player").GetComponent<Player>();
         _animator = gameObject.GetComponent<Animator>();
@@ -64,11 +68,13 @@ public class Enemy : MonoBehaviour
             transform.position = new Vector3(Random.Range(-14f, 14f), 7.67f);
         }
 
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        
+        _vectorMovimiento = new Vector3(_xMovement, -1.0f, 0);
+        transform.Translate(_vectorMovimiento * _speed * Time.deltaTime);
 
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position + _vectorRayOffset, Vector3.down);
-        Debug.DrawRay(transform.position + _vectorRayOffset, Vector3.down);
+        
         if (hit.collider != null && hit.collider.gameObject.CompareTag("Powerup"))
         {
             Instantiate(_laser, new Vector2(transform.position.x, transform.position.y - 1.37f), Quaternion.identity);           
@@ -99,6 +105,28 @@ public class Enemy : MonoBehaviour
 
     }
 
+    public void Evadir(float laserPositionX)
+    {
+        
+        if (_xMovement == 0)
+        {
+            StartCoroutine(IniciarEvasion(laserPositionX));
+        }
+    }
+
+    private IEnumerator IniciarEvasion(float laserPositionX)
+    {
+        Debug.Log("Evadiendo");
+        if (transform.position.x < laserPositionX)
+        {
+            _xMovement = -1.0f;
+        } else
+        {
+            _xMovement = 1.0f;
+        }
+        yield return new WaitForSeconds(2);
+        _xMovement = 0;
+    }
     private IEnumerator Shot()
     {
         yield return new WaitForSeconds(Random.Range(1.0f, 3.0f));
