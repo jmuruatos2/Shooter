@@ -18,12 +18,13 @@ public class SpawnManager : MonoBehaviour
     private float _secondsWaitNextWave;
     private float _waitFrequencyInWave;
     private int _enemyIndex;
+    private WaitForSeconds _wait5Seconds;
   
 
     // Start is called before the first frame update
     void Start()
     {
-
+        _wait5Seconds = new WaitForSeconds(5);
     }
 
     public void StartSpawning()
@@ -35,6 +36,11 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine("SpawnMissile");
     }
 
+    public void StartSpawningBoss()
+    {
+        playing = true;
+        StartCoroutine(SpawnPowerupBoss1());
+    }
 
     // Update is called once per frame
     void Update()
@@ -120,6 +126,15 @@ public class SpawnManager : MonoBehaviour
         {
             yield return new WaitForSeconds(Random.Range(10, 20));
             Instantiate(_powerups[5], new Vector3(RandomX(), 8), Quaternion.identity);
+        }
+    }
+
+    private IEnumerator SpawnPowerupBoss1()
+    {
+        while (playing)
+        {
+            yield return _wait5Seconds;
+            Instantiate(_powerups[3], new Vector3(RandomX(), 8), Quaternion.identity);
         }
     }
 
